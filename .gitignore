@@ -6,4 +6,7 @@ __pycache__
 .env
 poetry.lock
 .python-version
+sdist
+dist
+build
 

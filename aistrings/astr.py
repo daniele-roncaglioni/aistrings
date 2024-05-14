@@ -1,8 +1,8 @@
 import datetime
-from typing import TypedDict, List
+from typing import TypedDict
 
-from models.base import BaseModel
-from models.openai import OpenAIModel
+from .models.base import BaseModel
+from .models.openai import OpenAIModel
 
 MODEL_PROVIDERS = {
     'openai': OpenAIModel
@@ -12,9 +12,9 @@ MODEL_PROVIDERS = {
 class AiStrings:
     def __init__(self, provider_name: str, model_name: str, temperature=0):
         assert provider_name in MODEL_PROVIDERS.keys()
-        self.model: BaseModel = MODEL_PROVIDERS[provider_name](model_name=model_name, temperature=0)
+        self.model: BaseModel = MODEL_PROVIDERS[provider_name](model_name=model_name, temperature=temperature)
         self.cumulative_cost = 0
-        self.history: List[HistoryItem] = []
+        self.history: list[HistoryItem] = []
 
     def reset_cost(self):
         self.cumulative_cost = 0
@@ -57,7 +57,7 @@ class AiStrings:
         self.log(action_type='summarize', input_str=text, output_str=response, cost=cost)
         return response
 
-    def match(self, query: str, targets: List[str]) -> (str, int):
+    def match(self, query: str, targets: list[str]) -> tuple[str, int]:
         messages = [
             {
                 "role": "user",
@@ -72,7 +72,7 @@ class AiStrings:
         self.log(action_type='match', input_str=query, output_str=targets[index], cost=cost)
         return targets[index], index
 
-    def split(self, text: str, criterion: str) -> List[str]:
+    def split(self, text: str, criterion: str) -> list[str]:
         messages = [
             {
                 "role": "user",
@@ -85,7 +85,7 @@ class AiStrings:
         self.log(action_type='split', input_str=text, output_str=response["parts"], cost=cost)
         return response["parts"]
 
-    def join(self, text_list: List[str], criterion: str):
+    def join(self, text_list: list[str], criterion: str):
         messages = [
             {
                 "role": "user",
@@ -97,27 +97,6 @@ class AiStrings:
         response, cost = self.model(messages=messages, response_type="text")
         self.log(action_type='join', input_str=str(text_list), output_str=response, cost=cost)
         return response
-
-    def replace(self):
-        pass
-
-    def answer(self):
-        pass
-
-    def is_factual(self):
-        pass
-
-    def make_verbose(self):
-        pass
-
-    def elaborate(self):
-        pass
-
-    def correct_grammar(self):
-        pass
-
-    def detect_lang(self):
-        pass
 
 
 class HistoryItem(TypedDict):

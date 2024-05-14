@@ -3,7 +3,6 @@ import os
 
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
-from typing import Literal
 from .base import BaseModel
 
 MODEL_PRICES = {

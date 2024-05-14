@@ -60,6 +60,18 @@ Currently available operations:
 - astr.match
 - astr.split
 
+coming soon:
+- astr.replace
+- astr.substr
+- astr.translate
+- astr.answer
+- astr.is_factual
+- astr.make_verbose
+- astr.elaborate
+- astr.correct_grammar
+- astr.detect_lang
+- astr.detect_sentiment
+
 ## More Examples
 
 ### Split
