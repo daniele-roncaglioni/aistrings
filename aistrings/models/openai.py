@@ -27,11 +27,7 @@ class OpenAIModel(BaseModel):
         price_dict = MODEL_PRICES[response.model]
         return nr_tokens_input * price_dict['input_tokens'] + nr_tokens_output * price_dict['output_tokens']
 
-    def __call__(
-            self,
-            messages: list[dict],
-            response_type: Literal["text", "json_object"] = "json_object"
-    ) -> (dict, float):
+    def __call__(self, messages, response_type) -> (dict, float):
         response = self.client.chat.completions.create(
             model=self.model_name,
             temperature=self.temperature,
