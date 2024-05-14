@@ -28,7 +28,7 @@ print(f"Option at index {index} is the best: \"{response}\"")
 ```
 
 ```
-Option at index 2 is the best: ''The cat jumps over the fence''
+Option at index 2 is the best: "The cat jumps over the fence"
 ```
 
 Keep track of the costs with:
@@ -82,6 +82,31 @@ print(response)
 
 ```
 ['I have never seen ', ' through a telescope, but I would really love to see it once.']
+```
+
+### Join
+
+```python
+from dotenv import load_dotenv
+
+from aistrings import AiStrings
+
+load_dotenv()
+
+astr = AiStrings(provider_name="openai", model_name="gpt-4-0125-preview")
+
+text_list = [
+    "The cat sleeps too much during the day, so it wakes up in the night and wants to play.",
+    "When the cat wakes up in the night and wants to play it usually starts walking across my pillow.",
+]
+criterion = "Join the texts and remove duplicate information and use as few words as possible."
+
+response = astr.join(text_list, criterion)
+print(response)
+```
+
+```
+The cat sleeps too much during the day, so it wakes up in the night and wants to play, usually starting by walking across my pillow.
 ```
 
 ### Summarize
