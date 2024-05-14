@@ -85,6 +85,19 @@ class AiStrings:
         self.log(action_type='split', input_str=text, output_str=response["parts"], cost=cost)
         return response["parts"]
 
+    def join(self, text_list: List[str], criterion: str):
+        messages = [
+            {
+                "role": "user",
+                "content": f"You will receive a list of texts and a criterion for how to join the texts."
+                           f"Return the texts joined together based on the criterion."
+                           f"Texts: {text_list}, Criterion: {criterion}"
+            },
+        ]
+        response, cost = self.model(messages=messages, response_type="text")
+        self.log(action_type='join', input_str=str(text_list), output_str=response, cost=cost)
+        return response
+
     def replace(self):
         pass
 
