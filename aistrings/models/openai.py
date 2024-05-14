@@ -1,11 +1,10 @@
 import json
 import os
 
-from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from typing import Literal
-from base import BaseModel
+from .base import BaseModel
 
 MODEL_PRICES = {
     "gpt-3.5-turbo-0125": {"input_tokens": 0.0005 / 1000, "output_tokens": 0.0015 / 1000},
@@ -14,8 +13,7 @@ MODEL_PRICES = {
 
 
 class OpenAIModel(BaseModel):
-    def __init__(self, model_name: str, temperature=1):
-        load_dotenv()
+    def __init__(self, model_name: str, temperature=0):
         assert os.environ.get("OPENAI_API_KEY") is not None
         assert model_name in MODEL_PRICES.keys()
         self.model_name = model_name
@@ -32,12 +30,11 @@ class OpenAIModel(BaseModel):
     def __call__(
             self,
             messages: list[dict],
-            model="gpt-3.5-turbo-0125",
             response_type: Literal["text", "json_object"] = "json_object"
     ) -> (dict, float):
         response = self.client.chat.completions.create(
-            model=model,
-            temperature=0,
+            model=self.model_name,
+            temperature=self.temperature,
             response_format={"type": response_type},
             messages=messages
         )
