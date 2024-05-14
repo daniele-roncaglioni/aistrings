@@ -1,1 +1,1 @@
-from main import *
+from .astr import AiStrings
