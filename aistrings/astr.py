@@ -143,7 +143,7 @@ class AiStrings:
             },
         ]
         response, cost = self.model(messages=messages, response_type="text")
-        self.log(action_type='match', input_str=text, output_str=response, cost=cost)
+        self.log(action_type='substr', input_str=text, output_str=response, cost=cost)
         return response
 
     def match(self, text: str, test_text: str) -> bool:
