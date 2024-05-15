@@ -63,12 +63,19 @@ class AiStrings:
                 "role": "user",
                 "content": f"You will receive a query and list of possible targets."
                            f"Find the target that is semantically the closest to the query."
-                           f"Return the index of the matching target starting from 0. Return only the index."
+                           f"Return the index of the matching target starting from 0. Return the index (not the matching target) and the index only!."
                            f"Query: {query}, Targets: {targets}"
             },
         ]
         response, cost = self.model(messages=messages, response_type="text")
-        index = int(response)
+        try:
+            index = int(response)
+        except ValueError:
+            # sometimes llm messes up and returns the target instead of the index
+            try:
+                index = targets.index(response)
+            except ValueError:
+                raise ValueError(f"Response {response} is not a valid index or target.")
         self.log(action_type='match', input_str=query, output_str=targets[index], cost=cost)
         return targets[index], index
 

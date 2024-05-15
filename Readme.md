@@ -7,6 +7,11 @@ For example matching two strings with a regex or a fuzzy string matching algorit
 
 AiStrings provides semantics aware string APIs with a familiar interface.
 
+```bash
+pip install aistrings
+```
+Make sure to set `OPENAI_API_KEY` in your `.env` file or directly in your environment.
+
 ```python
 from dotenv import load_dotenv
 from aistrings import AiStrings
