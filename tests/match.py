@@ -4,7 +4,7 @@ from aistrings import AiStrings
 
 load_dotenv()
 
-astr = AiStrings(provider_name="openai", model_name="gpt-3.5-turbo-0125")
+astr = AiStrings(provider_name="openai", model_name="gpt-3.5-turbo-0125", temperature=1)
 
 targets = [
     "The cat sleeps too much",
