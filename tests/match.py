@@ -4,16 +4,15 @@ from aistrings import AiStrings
 
 load_dotenv()
 
-astr = AiStrings(provider_name="openai", model_name="gpt-3.5-turbo-0125", temperature=1)
+astr = AiStrings(provider_name="openai", model_name="gpt-4-0125-preview", temperature=0)
 
-targets = [
-    "The cat sleeps too much",
-    "The dog jumps over the fence",
-    "The cat jumps over the fence",
-    "I am so happy"
-]
-query = "The cat is very agile!"
-
-response, index = astr.match(query, targets)
+text = "I would have never though that i would one day love dogs as much as cats."
+test_text = "Love for dogs."
+response = astr.match(text, test_text)
 astr.log_history()
-print(f"Option at index {index} is the best: \"{response}\"")
+print(response)
+
+test_text = "Love for parrots."
+response = astr.match(text, test_text)
+astr.log_history()
+print(response)

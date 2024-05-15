@@ -57,7 +57,10 @@ class AiStrings:
         self.log(action_type='summarize', input_str=text, output_str=response, cost=cost)
         return response
 
-    def match(self, query: str, targets: list[str]) -> tuple[str, int]:
+    def find(self, query: str, targets: list[str]) -> tuple[str, int]:
+        """
+        Find the best matched target based on criterion.
+        """
         messages = [
             {
                 "role": "user",
@@ -76,10 +79,13 @@ class AiStrings:
                 index = targets.index(response)
             except ValueError:
                 raise ValueError(f"Response {response} is not a valid index or target.")
-        self.log(action_type='match', input_str=query, output_str=targets[index], cost=cost)
+        self.log(action_type='find', input_str=query, output_str=targets[index], cost=cost)
         return targets[index], index
 
     def split(self, text: str, criterion: str) -> list[str]:
+        """
+        Split text into a list of parts based on the criterion. Semantic version of text.split("str").
+        """
         messages = [
             {
                 "role": "user",
@@ -93,6 +99,9 @@ class AiStrings:
         return response["parts"]
 
     def join(self, text_list: list[str], criterion: str):
+        """
+        Join a list of texts based on the criterion. Semantic version of "str".join(text_list).
+        """
         messages = [
             {
                 "role": "user",
@@ -104,6 +113,55 @@ class AiStrings:
         response, cost = self.model(messages=messages, response_type="text")
         self.log(action_type='join', input_str=str(text_list), output_str=response, cost=cost)
         return response
+
+    def replace(self, text: str, criterion: str) -> str:
+        """
+        Replace parts of the text based on the criterion. Semantic version of text.replace("str1", "str2").
+        """
+        messages = [
+            {
+                "role": "user",
+                "content": f"You will receive a text and a prompt explaining what needs to be replaced in the text."
+                           f"Return the edited text only."
+                           f"Text: {text}, Criterion: {criterion}"
+            },
+        ]
+        response, cost = self.model(messages=messages, response_type="text")
+        self.log(action_type='replace', input_str=text, output_str=response, cost=cost)
+        return response
+
+    def substr(self, text: str, criterion: str) -> str:
+        """
+        Return a part of the text based on the criterion. Semantic version of text[n:m].
+        """
+        messages = [
+            {
+                "role": "user",
+                "content": f"You will receive a text and a criterion for what needs to be found in the text."
+                           f"Return the most relevant part based on the criterion. Bes short, you are allowed to use ellipsis to shorten the result."
+                           f"Text: {text}, Criterion: {criterion}"
+            },
+        ]
+        response, cost = self.model(messages=messages, response_type="text")
+        self.log(action_type='match', input_str=text, output_str=response, cost=cost)
+        return response
+
+    def match(self, text: str, test_text: str) -> bool:
+        """
+        Return True if the topic in contained_text is also present in text, False otherwise.
+        """
+        messages = [
+            {
+                "role": "user",
+                "content": f"You will receive a text and another test_text for what needs to be found in the text."
+                           f"Return True if the topic in test_text is somehow also present in the text. "
+                           f"False otherwise. Return json with the key is_match."
+                           f"Text: {text}, Test text: {test_text}"
+            },
+        ]
+        response, cost = self.model(messages=messages, response_type="json_object")
+        self.log(action_type='match', input_str=text, output_str=response['is_match'], cost=cost)
+        return response['is_match']
 
 
 class HistoryItem(TypedDict):
